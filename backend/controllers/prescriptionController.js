@@ -9,13 +9,13 @@ export const uploadPrescription = asyncHandler(async (req, res) => {
     throw new Error("Please upload a prescription image");
   }
 
-  const imageUrl = `/uploads/prescriptions/${req.file.filename}`;
+const prescription = await Prescription.create({
+  user: req.user._id,
+  imageUrl: "",
+  status: "processing",
+});
 
-  const prescription = await Prescription.create({
-    user: req.user._id,
-    imageUrl,
-    status: "processing",
-  });
+
 
   try {
     const rawText = await extractTextFromImage(req.file.path);
