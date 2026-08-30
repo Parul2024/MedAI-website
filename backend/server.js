@@ -60,10 +60,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
-// Middleware
 app.use(
   cors({
     origin: process.env.CLIENT_URL || "*",
@@ -74,24 +70,22 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static uploads
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
 
-// Test route
 app.get("/", (req, res) => {
   res.send("MedAI API is running...");
 });
 
-// API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/reminders", reminderRoutes);
 app.use("/api/wellness", wellnessRoutes);
 
-// Error handling
 app.use(notFound);
 app.use(errorHandler);
 
-// IMPORTANT: Do NOT use app.listen() on Vercel
 export default app;
